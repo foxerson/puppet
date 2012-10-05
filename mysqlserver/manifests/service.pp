@@ -3,7 +3,7 @@ class mysqlserver::service {
     ensure => running,
     hasstatus => true,
     hasrestart => true,
-    enabled => true,
+    enable => true,
     require => Class["mysqlserver::install"],
   }
 }
