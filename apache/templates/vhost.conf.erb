@@ -1,0 +1,18 @@
+NameVirtualHost <%= ip %>:<%= port %>
+<% if serveraliases.is_a? Array -%>
+<% serveraliases.each do |name| -%><%= "	ServerAlias #{name}\n" %><% end -%>
+<% elseif serveraliases != '' -%>
+<%= "	ServerAlias #{serveraliases}" -%>
+<% end -%>
+	DocumentRoot <%= docroot %>
+	<Directory <%= docroot %>>
+		Options Indexes FollowingSymLinks MultViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+	
+	ErrorLog <%= logdir %>/<%= name %>-error.log
+	CustomLog <%= logdir %>/<%= name %>-access.log
+</VirtualHost>
+	
