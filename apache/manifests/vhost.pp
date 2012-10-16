@@ -7,7 +7,7 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
   include apache
   
   file { "$apache::params::cfg_dir/${priority}-${name}": 
-    content => template($template)
+    content => template($template),
     owner => root,
     group => root,
     mode => 777,
