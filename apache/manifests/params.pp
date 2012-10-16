@@ -2,7 +2,7 @@ class apache::params {
 	case $operatingsystem {
 		'Ubuntu','Debian': { 
 		  $pkg='apache2'
-		  $svc="apache"
+		  $svc='apache2'
 		  $cfg_dir="/etc/apache2/sites-enabled"
 		  }
 		'RedHat', 'CentOS': { 
