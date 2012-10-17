@@ -1,0 +1,14 @@
+<VirtualHost <%  if ssl -%><%= "#{ip}:443" -%><% else -%><%= "#{ip}:80" -%><% end -%>>
+	ServerAdmin lbre-infra@lists.stanford.edu
+	ServerName <%= name %>
+<% if serveraliases.is_a? Array -%>
+<%= "	ServerAlias " -%>
+<% serveraliases.each do |s| -%><%= "#{s} " %><% end -%><%= "\n"%>
+<% elsif serveraliases != '' -%>
+<%= "	ServerAlias #{serveraliases}\n" -%>
+<% end -%>
+	RedirectMatch permanent (.*) <%= dest_url %>
+
+	ErrorLog <%= logdir %>/<%= name %>-error.log
+	CustomLog <%= logdir %>/<%= name %>-access.log
+</VirtualHost>
