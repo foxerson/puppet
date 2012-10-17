@@ -1,0 +1,57 @@
+<IfModule mod_ssl.c>
+<VirtualHost <%  if ssl -%><%= "#{ip}:443" -%><% else -%><%= "#{ip}:80" -%><% end -%>>	
+	ServerAdmin lbre-it-help@stanford.edu
+	ServerName <%= name %>
+<% if serveraliases.is_a? Array -%>
+<%= "	ServerAlias " -%>
+<% serveraliases.each do |s| -%><%= "#{s} " %><% end -%><%= "\n"%>
+<% elsif serveraliases != '' -%>
+<%= "	ServerAlias #{serveraliases}\n" -%>
+<% end -%>
+
+<% if location.is_a? Hash %>
+        <Location /mapguide2011>
+          AuthType WebAuth
+          Require privgroup stanford:faculty stanford:staff maps:special-users-facops
+          RequestHeader set "sunet" "%{WEBAUTH_USER}e"
+
+          #ProxyPass http://localhost:8001/mapguide2011
+          #ProxyPassReverse http://localhost:8001/mapguide2011
+          ProxyPass http://171.64.144.91/mapguide2011/
+          ProxyPassReverse http://171.64.144.91/mapguide2011/
+        </Location>
+
+        <Location /> 
+          AuthType WebAuth
+          Require privgroup stanford:faculty stanford:staff maps:special-users-facops
+          RequestHeader set "sunet" "%{WEBAUTH_USER}e"
+  
+          #ProxyPass http://localhost:8000/
+          #ProxyPassReverse http://localhost:8000/
+          ProxyPass http://171.64.144.118/
+          ProxyPassReverse http://171.64.144.118/
+        </Location>
+
+      	ErrorLog /var/log/apache2/lbre-basemap.stanford.edu_error.log
+
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+
+        CustomLog /var/log/apache2/lbre-basemap.stanford.edu_access.log combined
+
+        #   SSL Engine Switch:
+        #   Enable/Disable SSL for this virtual host.
+        SSLEngine on
+
+        #   A self-signed (snakeoil) certificate can be created by installing
+        #   the ssl-cert package. See
+        #   /usr/share/doc/apache2.2-common/README.Debian.gz for more info.
+        #   If both key and certificate are stored in the same file, only the
+        #   SSLCertificateFile directive is needed.
+        #SSLCertificateFile    /etc/ssl/certs/ssl-cert-snakeoil.pem
+        #SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+
+        # A self-signed certificate
+        SSLCertificateFile     /etc/ssl/certs/lbre-basemap.stanford.edu.crt
+        SSLCertificateKeyFile  /etc/ssl/private/lbre-basemap.stanford.edu.key
