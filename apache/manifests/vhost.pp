@@ -2,7 +2,7 @@
 # creating/modifying an Apache virtual host entry
 # each host can have as many as necessary
 
-define apache::vhost($ip, $port, $docroot, $ssl=true, $template='apache/vhost.conf.erb',
+define apache::vhost($ip, $docroot, $ssl=true, $template='apache/vhost.conf.erb',
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
   include apache
   
