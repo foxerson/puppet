@@ -1,4 +1,4 @@
-<VirtualHost <%= ip %>:<%= port %>>
+<VirtualHost <%  if ssl -%><%= "#{ip}:443>\n" -%><% else -%><%= "#{ip}:80>\n" -%><% end -%>
 	ServerName <%= name %>
 <% if serveraliases.is_a? Array -%>
 <%= "	ServerAlias " -%>
@@ -14,10 +14,9 @@
 		allow from all
 	</Directory>
 	
-<% if ssl %> 
-<%= "	SSLCertificateKeyFile /afs/ir/group/lbre-tsg/ssl-certs/#{@hostname}/#{name}.key\n" -%>
+<% if ssl %><%= "	SSLCertificateKeyFile /afs/ir/group/lbre-tsg/ssl-certs/#{@hostname}/#{name}.key\n" -%>
 <%= "	SSLCertificateFile /afs/ir/group/lbre-tsg/ssl-certs/#{@hostname}/#{name}.cer\n" -%>
-<%= "	SSLCertificateChainFile /afs/ir/group/lbre-tsg/ssl-certs/#{@hostname}/#{name}.cer\n" -%> 	
+<%= "	SSLCertificateChainFile /afs/ir/group/lbre-tsg/ssl-certs/#{@hostname}/#{name}.cer" -%> 	
 <% end -%>
 
 	ErrorLog <%= logdir %>/<%= name %>-error.log
