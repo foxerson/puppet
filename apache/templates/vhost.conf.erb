@@ -1,8 +1,10 @@
-NameVirtualHost <%= ip %>:<%= port %>
+<VirtualHost <%= ip %>:<%= port %>>
+	ServerName <%= name %>
 <% if serveraliases.is_a? Array -%>
-<% serveraliases.each do |name| -%><%= "	ServerAlias #{name}\n" %><% end -%>
-<% elseif serveraliases != '' -%>
-<%= "	ServerAlias #{serveraliases}" -%>
+<%= "	ServerAlias " -%>
+<% serveraliases.each do |s| -%><%= "#{s} " %><% end -%><%= "\n"%>
+<% elsif serveraliases != '' -%>
+<%= "	ServerAlias #{serveraliases}\n" -%>
 <% end -%>
 	DocumentRoot <%= docroot %>
 	<Directory <%= docroot %>>
@@ -12,7 +14,12 @@ NameVirtualHost <%= ip %>:<%= port %>
 		allow from all
 	</Directory>
 	
+<% if ssl %> 
+<%= "	SSLCertificateKeyFile /afs/ir/group/lbre-tsg/ssl-certs/#{@hostname}/#{name}.key\n" -%>
+<%= "	SSLCertificateFile /afs/ir/group/lbre-tsg/ssl-certs/#{@hostname}/#{name}.cer\n" -%>
+<%= "	SSLCertificateChainFile /afs/ir/group/lbre-tsg/ssl-certs/#{@hostname}/#{name}.cer\n" -%> 	
+<% end -%>
+
 	ErrorLog <%= logdir %>/<%= name %>-error.log
 	CustomLog <%= logdir %>/<%= name %>-access.log
 </VirtualHost>
-	
