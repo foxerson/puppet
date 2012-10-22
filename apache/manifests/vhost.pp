@@ -35,24 +35,13 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
 # apache::vhost_proxy { 'lbre-basemap.stanford.edu':
 #   ip => '171.64.144.200',
 #   serveraliases => ['lbre-basemap', 'basemap'],
-#   location => [ {
-#                  "Location"=> "/mapguide2011",
-#                  "AuthType" => "WebAuth",
-#                  "Require privgroup" => [ 'stanford:faculty', 'stanford:staff', 'stanford:group' ],
-#                  "ProxyPass" => 'http://171.64.144.91/mapguide2011/',
-#                  "ProxyPassReverse" => 'http://171.64.144.91/mapguide2011/',
-#                  },
-#                  {
-#                    "Location"=> "/",
-#                    "AuthType" => "WebAuth",
-#                    "Require privgroup" => [ 'stanford:faculty' ],
-#                    "ProxyPass" => 'http://171.64.144.91/',
-#                    "ProxyPassReverse" => 'http://171.64.144.91/',
-#                  }
-#               ],
+#   locations => [
+#                   ["Location /mapguide2011", "ProxyPass http://localhost", "ProxyPassRev http://localhost2"], 
+#                   ["Location /mapguide2012", "ProxyPass http://localhost", "ProxyPassRev http://localhostw"]
+#                 ]
 # }
 
-define apache::vhost_proxy($ip, $serveraliases, $template='apache/vhost_redirect.conf.erb', *$location }
+define apache::vhost_proxy($ip, $serveraliases, $template='apache/vhost_custom_block.conf.erb', $custom_blockßß='' }
   include apache
   
   file { "$apache::params::cfg_dir/${priority}-${name}": 
