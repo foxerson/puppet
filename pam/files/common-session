@@ -1,0 +1,14 @@
+#
+# /etc/pam.d/common-session - session-related modules common to all services
+#
+# This configuration is based on the configuration
+# used by Farmshare team.
+# Questions: email me at fcosta@stanford.edu
+
+# $ Id: $
+# Ubuntu/Debian
+
+session optional pam_umask.so
+session	optional pam_krb5.so ignore_root minimum_uid=1000
+session optional pam_afs_session.so
+session	required pam_unix.so 
