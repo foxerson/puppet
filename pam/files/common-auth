@@ -1,0 +1,14 @@
+#
+# /etc/pam.d/common-auth - authentication settings common to all services
+#
+# This configuration is based on the configuration
+# used by Farmshare team.
+# Questions: email me at fcosta@stanford.edu
+
+# $ Id: $
+# Ubuntu/Debian
+
+auth	[success=ok default=1]	pam_krb5.so minimum_uid=1000 ignore_root
+auth	sufficient	pam_afs_session.so
+auth	required	pam_unix.so	nullok_secure try_first_pass
+

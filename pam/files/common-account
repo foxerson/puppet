@@ -1,0 +1,14 @@
+#
+# /etc/pam.d/common-account - authorization settings common to all services
+#
+# This configuration is based on the configuration
+# used by Farmshare team.
+# Questions: email me at fcosta@stanford.edu
+
+# $ Id: $
+# Ubuntu/Debian
+
+account		required	pam_access.so
+account		required	pam_krb5.so minimum_uid=1000
+account		[default=bad success=ok user_unknown=ignore system_err=ignore service_err=ignore]	pam_ldap.so
+account		required	pam_unix.so
