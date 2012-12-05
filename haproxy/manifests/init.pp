@@ -9,7 +9,7 @@ class haproxy {
     ensure => 'running',
     hasstatus => true,
     hasrestart => true,
-    enable => true;
+    enable => true,
     require => Package['haproxy'],
   }
 }
