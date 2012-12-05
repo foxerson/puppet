@@ -8,7 +8,7 @@
 # [ "192.168.1.2:80", 
     "192.168.1.4:8080"]
 
-define($name, $port=8080, $backends, $template='haproxy/haproxy.conf.erb',
+define haproxy::config ($name, $port=8080, $backends, $template='haproxy/haproxy.conf.erb',
 $cookie=false, $check=true) {
   
   include haproxy
