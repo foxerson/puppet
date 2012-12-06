@@ -1,4 +1,4 @@
-define haproxy::config ($port=8080, $backends, $template='haproxy/haproxy.conf.erb',
+define haproxy::config ($port=8080, $addr, $backends, $template='haproxy/haproxy.conf.erb',
 $cookie=false, $checksvr=true) {
   
   include haproxy

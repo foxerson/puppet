@@ -1,4 +1,4 @@
-listen <%= "#{name}:#{port}" %>
+listen <%= "#{name} #{addr}:#{port}" %>
   mode http
   balance roundrobin
 <% if cookie -%><%= "  cookie #{name[0,5].upcase} prefix\n" %><% end -%>
