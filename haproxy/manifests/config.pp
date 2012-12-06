@@ -3,7 +3,7 @@ $cookie=false, $checksvr=true) {
   
   include haproxy
 
-  file { "${name}.conf":
+  file { "/etc/haproxy/${name}.conf":
     content => template($template),
     require => Package['haproxy'],
   } 
