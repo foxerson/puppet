@@ -1,19 +1,19 @@
-listen <%= name %>:<%= port %>
-	mode http
-	balance roundrobin
-	<% if cookie -%>
-	cookie <%= name[0,5].upcase %> prefix 
-	<% end -%>
-	option httpclose
-	option forwardfor
-	<% if check -%>
-	option httpchk HEAD /index.html HTTP/1.0
-	<% end -%>
-	
-	<% bnum = 0 %>
-	<% if backends.is_a? Array -%>
-		<% backends.each do |b| -%>
-	    <% bnum += 1 %>
-	server <%= name[0,4] + bnum %> <%= b %> <%= "cookie #{name[0,2]+bnum}" if cookie %> <%= "check" if check %>  
-	    <% end %> 
-	<% end %>
+listen <%= "#{name}:#{port}" %>
+  mode http
+  balance roundrobin
+<% if cookie -%><%= "  cookie #{name[0,5].upcase} prefix\n" %><% end -%>
+  option httpclose
+  option forwardfor
+<% if checksvr -%><%= "  option httpchk HEAD /index.html HTTP/1.0" -%><% end -%>  
+<% bnum = 1 -%>
+<% if backends.is_a? Array -%>
+<% backends.each do |b| -%>
+<% res = "  server #{name[0,4]}#{bnum.to_s} #{b} " -%>
+<% if cookie -%>
+<% res = res + "cookie #{name[0,2]}#{bnum.to_s} " -%>
+<% end -%>
+<% if checksvr -%><% res = res + "check" -%><% end -%>  
+<% bnum += 1 -%>
+<%= res -%>
+<% end -%>
+<% end -%>
