@@ -10,20 +10,20 @@ $cookie=false, $checksvr=true) {
     ensure => directory,
     mode => 0755,
     owner => "root",
-    group => "root",  
+    group => "root"  
   }
 
   file { $cfg_path:
     ensure => present,
     content => template($template),
-    require => Package['haproxy'],
     owner => 'root',
     group => 'root',
     mode => '0440',
-    notify => Service["haproxy"]
+    notify => Service["haproxy_service_${name}"],
+    require => Package['haproxy'],
   }
   
-  service { "haproxy":
+  service { "haproxy_service_${name}":
     binary => $operatingsystem ? {
       /(ubuntu|debian)/ => "/usr/sbin/haproxy",
       "redhat" => "/usr/sbin/haproxy",
