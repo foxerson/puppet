@@ -4,12 +4,4 @@ class haproxy {
   package { 'haproxy':
     ensure => installed, 
   }
-  
-  service { 'haproxy':
-    ensure => 'running',
-    hasstatus => true,
-    hasrestart => true,
-    enable => true,
-    require => Package['haproxy'],
-  }
 }
