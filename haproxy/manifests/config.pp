@@ -24,11 +24,7 @@ $cookie=false, $checksvr=true) {
   }
   
   service { "haproxy_service_${name}":
-    binary => $operatingsystem ? {
-      /(ubuntu|debian)/ => "/usr/sbin/haproxy",
-      "redhat" => "/usr/sbin/haproxy",
-      default => "/usr/sbin/haproxy", 
-    },
+    ensure => running,
     start => "/usr/sbin/haproxy -D -f ${cfg_path}",
     stop => "/bin/kill -SIGUSR1 `pgrep -f ${name}.cfg`",
     restart => "/bin/kill -SIGTTIN `pgrep -f ${name}.cfg`",
@@ -38,10 +34,4 @@ $cookie=false, $checksvr=true) {
     loglevel => debug
   }
   
-  # exec { "restart haproxy":
-  #   command => 'sh -c "killall -1 `pgrep -f ${name}.cfg`"',
-  #   subscribe => File["${name}.cfg"],
-  #   refreshonly => true,
-  #   logoutput => true,
-  # }
 }
