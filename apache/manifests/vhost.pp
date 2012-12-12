@@ -41,7 +41,7 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
 #                 ]
 # }
 
-define apache::vhost_proxy($ip, $serveraliases, $template='apache/vhost_custom_block.conf.erb', $custom_blockßß='' }
+define apache::vhost_proxy($ip, $serveraliases, $template='apache/vhost_custom_block.conf.erb', $custom_block='') {
   include apache
   
   file { "$apache::params::cfg_dir/${priority}-${name}": 
