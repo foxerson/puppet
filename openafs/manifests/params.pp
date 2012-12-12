@@ -16,6 +16,7 @@ class openafs::params {
 		  }  
 		}
 		Ubuntu,Debian: {
+		  # Required for wallet-client
 		  file { "/etc/apt/sources.list.d/stanford.list":
 		    ensure => present,
         owner => "root",
@@ -23,6 +24,15 @@ class openafs::params {
         mode => 0644,
         content => "deb http://debian.stanford.edu/debian-stanford stable main",	  
 		  }
+		  
+		  # It's OK to install unsigned packages
+      File {
+         "/etc/apt/apt.conf.d/99auth":       
+         owner     => root,
+         group     => root,
+         content   => "APT::Get::AllowUnauthenticated yes;",
+         mode      => 644;
+       }
 		}
 	}
 }
