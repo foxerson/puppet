@@ -22,6 +22,6 @@ class webauth {
             'redhat' => 'apache',
             default  => 'www-data', 
         },
-    require => Package['stanford-webauth'],
+    require => [Package["wallet-client"], Package['stanford-webauth']],
   }
 }
