@@ -35,6 +35,10 @@
 # These helper routines are broken out separately to reduce indentation, but
 # shouldn't be called separately.  They're purely an implementation detail.
 
+# will be used to set up repositories before 
+# installing wallet-client and stanford-webaut
+stage { 'aptrepos': before => Stage['main'] }
+
 define wallet::keytab(
     $kstart_cmd,
     $path,

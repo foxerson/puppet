@@ -1,6 +1,5 @@
 class openafs::install {
   require openafs::params
-  include wallet::client
   
   case $operatingsystem {
     RedHat,CentOS,Fedora: {
