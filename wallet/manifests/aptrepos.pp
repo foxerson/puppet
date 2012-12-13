@@ -1,5 +1,4 @@
-class { 'aptrepos':
-  stage => reposetup,
+class wallet::aptrepos {  
   if $operatingsystem == "Ubuntu" or $operatingsystem =="debian" {
       # Required for wallet-client
       file { "/etc/apt/sources.list.d/stanford.list":
@@ -17,7 +16,6 @@ class { 'aptrepos':
          group     => root,
          content   => "APT::Get::AllowUnauthenticated yes;",
          mode      => 644,
-         subscribe => File["/etc/apt/sources.list.d/stanford.list"],
          notify => Exec["aptitude update"],
       }
   

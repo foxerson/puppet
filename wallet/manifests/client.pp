@@ -6,11 +6,6 @@
 
 class wallet::client {
   
-  # will be used to set up repositories before 
-  # installing wallet-client and stanford-webaut
-  stage { 'reposetup': }
-  Stage['reposetup'] -> Stage['main']  
-  
   case $lsbdistrelease {
         "3": { 
             package { "wallet-client": ensure => absent }
@@ -20,11 +15,9 @@ class wallet::client {
                 "wallet-client": ensure => $lsbdistcodename ? {
                         sarge   => purged,
                         default => present,
-                        require => File["/etc/apt/sources.list.d/stanford.list"]
                     }
             }
         }
-  }  
+  }
   package { "kstart": ensure => present }
 }
-
