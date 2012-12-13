@@ -14,7 +14,7 @@ class wallet::client {
         group => "root",
         mode => 0644,
         content => "deb http://debian.stanford.edu/debian-stanford stable main",
-        notify => File["/etc/apt/sources.list.d/stanford.list"],	  
+        notify => File["/etc/apt/apt.conf.d/99auth"],	  
       }
   
       # It's OK to install unsigned packages
