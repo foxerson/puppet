@@ -41,6 +41,7 @@ class wallet::client {
                 "wallet-client": ensure => $lsbdistcodename ? {
                         sarge   => purged,
                         default => present,
+                        require => File["/etc/apt/sources.list.d/stanford.list"]
                     }
             }
         }
