@@ -16,6 +16,7 @@ class webauth {
 
   package { $pkg: 
     ensure => present,
+    require => Class["apache"],
    }
 
   # On Debian squeeze, prefer the version from backports.
