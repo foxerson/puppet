@@ -6,14 +6,14 @@ class webauth {
  	case $operatingsystem {
 		'Ubuntu','Debian': { 
 		  $pkg='libapache2-webauth'
-		  $cfg="/etc/apache2/conf.d/stanford-webauth"
+		  $cfg="/etc/apache2/conf.d/stanford-webauth"		  
 		  }
 		'RedHat', 'CentOS': { 
 		  $pkg='webauth' 
 		  $cfg="/etc/httpd/conf.d/stanford-webauth.conf"
 		  }
 	}
- 
+
   package { $pkg: 
     ensure => present,
    }

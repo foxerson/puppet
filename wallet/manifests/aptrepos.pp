@@ -7,8 +7,21 @@ class wallet::aptrepos {
         group => "root",
         mode => 0644,
         content => "deb http://debian.stanford.edu/debian-stanford stable main",
-        notify => File["/etc/apt/apt.conf.d/99auth"],	  
+        notify => File["/etc/apt/preferences.d/stanfordpriority"],	  
       }
+
+      # prefer the version from stanford main repository.
+		  file { "/etc/apt/preferences.d/stanfordpriority":
+	      ensure => present,
+	      content => "Package: *
+Pin: release o=Stanford
+Pin-Priority: 200
+
+Package: libremctl1
+Pin: release o=Stanford
+Pin-Priority: 600"
+        notify => File["/etc/apt/apt.conf.d/99auth"],
+		  }
   
       # It's OK to install unsigned packages
       file { "/etc/apt/apt.conf.d/99auth":       
