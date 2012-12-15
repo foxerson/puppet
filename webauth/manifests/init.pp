@@ -6,14 +6,17 @@ class webauth {
  	case $operatingsystem {
 		'Ubuntu','Debian': { 
 		  $pkg='libapache2-webauth'
-		  $cfg="/etc/apache2/conf.d/stanford-webauth"		  
+		  $cfg_dir="/etc/apache2/conf.d"
+		  $cfg="$cfg_dir/stanford-webauth"		  
 		  }
 		'RedHat', 'CentOS': { 
 		  $pkg='webauth' 
-		  $cfg="/etc/httpd/conf.d/stanford-webauth.conf"
+		  $cfg_dir="/etc/httpd/conf.d"
+		  $cfg="$cfg_dir/stanford-webauth.conf"
 		  }
 	}
-
+	
+  file { $cfg_dir: ensure => directory }
   package { $pkg: 
     ensure => present,
     require => Class["apache"],
