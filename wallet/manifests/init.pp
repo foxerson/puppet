@@ -19,7 +19,7 @@
 #         require => Wallet["service/adroit-gerbil"],
 #         ensure  => present,
 #     }
-#     
+# 
 #     # Remove the keytab file
 #     wallet { "service/funky-chicken": 
 #         path   => "/etc/funky/chicken.keytab",

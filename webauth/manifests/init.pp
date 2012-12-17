@@ -3,24 +3,24 @@
 
 class webauth {
   
- 	case $operatingsystem {
-		'Ubuntu','Debian': { 
-		  $pkg='libapache2-webauth'
-		  $cfg_dir="/etc/apache2/conf.d"
-		  $cfg="$cfg_dir/stanford-webauth"		  
-		  }
-		'RedHat', 'CentOS': { 
-		  $pkg='webauth' 
-		  $cfg_dir="/etc/httpd/conf.d"
-		  $cfg="$cfg_dir/stanford-webauth.conf"
-		  }
-	}
+  # case $operatingsystem {
+  #   'Ubuntu','Debian': { 
+  #     $pkg='libapache2-webauth'
+  #     $cfg_dir="/etc/apache2/conf.d"
+  #     $cfg="$cfg_dir/stanford-webauth"      
+  #     }
+  #   'RedHat', 'CentOS': { 
+  #     $pkg='webauth' 
+  #     $cfg_dir="/etc/httpd/conf.d"
+  #     $cfg="$cfg_dir/stanford-webauth.conf"
+  #     }
+  # }
 	
-  file { $cfg_dir: ensure => directory }
-  package { $pkg: 
-    ensure => present,
-    require => Class["apache"],
-   }
+  # file { $cfg_dir: ensure => directory }
+  # package { $pkg: 
+  #   ensure => present,
+  #   require => Class["apache"],
+  #  }
 
   # On Debian squeeze, prefer the version from backports.
   if ($lsbdistcodename == 'squeeze') {
@@ -31,12 +31,14 @@ class webauth {
   }
   
   # dont use stanford-webauth packages.
-  file { $cfg:
-    source => 'puppet:///modules/webauth/webauth.conf',
-    ensure => present,
-    before => Package["${pkg}"],
-  }
-    
+  # file { $cfg:
+  #    source => 'puppet:///modules/webauth/webauth.conf',
+  #    ensure => present,
+  #    before => Package["${pkg}"],
+  #  }
+  
+  package { "stanford-webauth": ensure => present } 
+   
   # Automate the keytab installation.
   file { '/etc/webauth': ensure => directory }
   wallet { "webauth/${fqdn}":
@@ -47,6 +49,6 @@ class webauth {
             'redhat' => 'apache',
             default  => 'www-data', 
         },
-    require => Package["${pkg}"],
+    require => Package["stanford-webauth"],
   }
 }
