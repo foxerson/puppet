@@ -5,7 +5,8 @@
 # Maybe eventually it should support wallet::server, etc.
 
 class wallet::client {
-    case $lsbdistrelease {
+  
+  case $lsbdistrelease {
         "3": { 
             package { "wallet-client": ensure => absent }
         }
@@ -17,7 +18,6 @@ class wallet::client {
                     }
             }
         }
-    }
-
+  }
+  package { "kstart": ensure => present }
 }
-

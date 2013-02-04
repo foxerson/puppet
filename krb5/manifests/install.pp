@@ -3,5 +3,5 @@ class krb5::install {
 		ensure => installed,
 	}
 	
-	include wallet::client
+	include pam, ldap, wallet::client
 }
