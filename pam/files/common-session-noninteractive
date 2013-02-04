@@ -1,0 +1,13 @@
+# /etc/pam.d/common-session - session-related modules common to all services
+# $Id: common-session 13929 2009-03-06 23:21:26Z
+#
+# This file is included from other service-specific PAM config files,
+# and should contain a list of modules that define tasks to be performed
+# at the start and end of sessions of *any* kind (both interactive and
+# non-interactive).  The default is pam_unix.
+#
+# Includes pam_foreground on timeshares
+
+session optional        pam_krb5.so
+session optional        pam_afs_session.so
+session required        pam_unix.so
