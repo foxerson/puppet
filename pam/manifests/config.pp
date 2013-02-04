@@ -85,6 +85,11 @@ class pam::config {
     	  path => "/etc/pam.d/common-session",
       	source => "puppet:///modules/pam/common-session",
     	}
+
+      file { "/etc/pam.d/common-session-noninteractive":
+        path => "/etc/pam.d/common-session-noninteractive",
+        source => "puppet:///modules/pam/common-session-noninteractive",
+      }
     }
   }
 }
