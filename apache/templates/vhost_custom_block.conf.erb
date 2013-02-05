@@ -1,0 +1,20 @@
+<VirtualHost *:443>
+        ServerName <%= name %>
+<% if serveraliases.is_a? Array -%>
+<%= "   ServerAlias " -%>
+<% serveraliases.each do |s| -%><%= "#{s} " %><% end -%><%= "\n"%>
+<% elsif serveraliases != '' -%>
+<%= "   ServerAlias #{serveraliases}\n" -%>
+<% end -%>
+
+<%# printing custom tags defined by the user to the file %>
+<% if custom_block.is_a? Array -%>
+<%# each block passed is an array of arrays %>
+<% custom_block.each do |b| %>
+<%= "\t#{b[0]}\n" -%> <%# first element is opening block %> 
+<% b[1..-2].each do |e| -%><%= "\t\t#{e}\n" %><% end %> <%# from the second to the antepenultimate element %> 
+<%= "\t#{b[-1]}\n" -%> <%# last element is the closing block %> 
+<% end %>
+<% end %>
+
+</VirtualHost>

@@ -15,15 +15,5 @@ class openafs::params {
          }
 		  }  
 		}
-		Ubuntu,Debian: {
-		  file { "/etc/apt/sources.list.d/stanford.list":
-		    ensure => present,
-        owner => "root",
-        group => "root",
-        mode => 0644,
-        content => "deb http://debian.stanford.edu/debian-stanford stable main",	  
-		  }
-		}
 	}
 }
-

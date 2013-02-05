@@ -1,0 +1,33 @@
+# -*- conf -*-
+#
+# Use the backports version of WebAuth for new features like multifactor
+# support.  This will also pull in the backports version of the remctl
+# libraries.
+
+Package: libapache2-webauth
+Pin: release a=squeeze-backports
+Pin-Priority: 991
+
+Package: libnet-remctl-perl
+Pin: release a=squeeze-backports
+Pin-Priority: 991
+
+Package: libremctl1
+Pin: release a=squeeze-backports
+Pin-Priority: 991
+
+Package: libremctl-dev
+Pin: release a=squeeze-backports
+Pin-Priority: 991
+
+Package: remctl-client
+Pin: release a=squeeze-backports
+Pin-Priority: 991
+
+Package: webauth-tests
+Pin: release a=squeeze-backports
+Pin-Priority: 991
+
+Package: webauth-utils
+Pin: release a=squeeze-backports
+Pin-Priority: 991

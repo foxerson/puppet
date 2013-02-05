@@ -1,5 +1,6 @@
 class openafs::install {
   require openafs::params
+  
   case $operatingsystem {
     RedHat,CentOS,Fedora: {
       # installing
@@ -13,7 +14,7 @@ class openafs::install {
       } else {
         package { 'kmod-openafs': ensure => present, }
       }
-      package { 'wallet-client': ensure => present, }
+      #package { 'wallet-client': ensure => present, }
     }
     
     Ubuntu,Debian: {
@@ -22,7 +23,7 @@ class openafs::install {
       package { 'openafs-modules-dkms': ensure => installed, }
       # package { 'libpam-afs-session': ensure => installed, }  
       # package { 'remctl-client': ensure => installed, }
-      package { 'wallet-client': ensure => installed, }
+      #package { 'wallet-client': ensure => installed, }
     }
   }
 }

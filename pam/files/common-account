@@ -8,7 +8,7 @@
 # $ Id: $
 # Ubuntu/Debian
 
-account		required	pam_access.so
-account		required	pam_krb5.so minimum_uid=1000
-account		[default=bad success=ok user_unknown=ignore system_err=ignore service_err=ignore]	pam_ldap.so
-account		required	pam_unix.so
+account	required        pam_access.so
+account sufficient      pam_unix.so
+account [default=bad success=ok user_unknown=ignore service_err=ignore system_err=ignore]   pam_ldap.so
+account required        pam_krb5.so
