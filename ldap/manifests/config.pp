@@ -5,6 +5,7 @@ class ldap::config {
     group => "root",
     mode => 0644,
     require => Class["ldap::install"],
+    notify => Class["ldap::service"],
   }
   
   # for both OSes
