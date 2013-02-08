@@ -8,21 +8,9 @@
 # - There is an user that is able to perform replication (GRANT REPLICATION), so that the slave can bind to it
 # - This script also changes the root password (inherits from a config class)
 
-class mysqlserver::config-master {
-	package { "mysql-server":
-		ensure => present,
-		require => User["mysql"],
-	}
-
-	user { "mysql":
-		ensure => present,
-		comment => "MySQL Server",
-		gid => "mysql",
-		shell => "/bin/false",
-		require => Group["mysql"],
-	}
-
-	group { "mysql":
-		ensure => present,
+class mysqlserver::config-master inherits mysqlserver::config {
+	file { "mysqlserver-test":
+		path => '/tmp/a'
+		ensure => file,
 	}
 }
