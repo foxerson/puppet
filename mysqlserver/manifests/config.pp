@@ -1,15 +1,12 @@
-# Ensures mysql-server is configured (base)
+# Ensures mysql-server is configured
 # NOTE: Ubuntu hosts ***ONLY***
 
-# This script changes the root password, and serves as base for other configuration scripts (master and slave)
+# It takes 2 password parameters: an old password and a new one. If the old password is set, it will change it to the new one.
+# if the new one is unset, it will do nothing. If the new one is set (and the old one unset), then it just checks the status
+# to make sure the new pass is good.
+# It also takes a mode parameter. It will configure the server as a master or slave in a replication set
 
-# It takes 2 password parameters: an old password and a new one. This script can be used to update passwords as well.
-# If you set the new pass to UNSET, it will not do anything and just silently pass...
-
-class mysqlserver::config {
-	$old_root_pw = ''
-	$root_pw     = 'Wh@teveR'
-
+class mysqlserver::config ( $old_root_pw='', $root_pw='UNSET', $mode='UNSET' ) {
 	if $root_pw != 'UNSET' {
 		case $old_root_pw {
 			'':      { $old_pw='' }
@@ -23,4 +20,6 @@ class mysqlserver::config {
 			path      => '/sbin:/usr/sbin:/usr/bin:/bin',
 		}
 	}
+
+	
 }
