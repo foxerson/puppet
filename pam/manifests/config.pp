@@ -22,7 +22,7 @@ class pam::config {
     /(RedHat|Fedora|Centos)/: {
       
       if $operatingsystemrelease >=6 {    
-        package { "nslcd": 
+        package { "nss-pam-ldapd": 
           ensure => installed,
         }
      
@@ -31,7 +31,7 @@ class pam::config {
           hasstatus => true,
           hasrestart => true,
           enable => true,
-          require => Package["nslcd"],
+          require => Package["nss-pam-ldapd"],
         }
 
       	file { "/etc/pam.d/password-auth-ac":
@@ -50,6 +50,7 @@ class pam::config {
   			file { "/etc/pam.d/system-auth":
         				ensure => link,
         				target => "/etc/pam.d/system-auth-lbre",
+                notify => Service["nscld"]
         }
         
       } else {
