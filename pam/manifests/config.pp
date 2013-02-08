@@ -22,17 +22,17 @@ class pam::config {
     /(RedHat|Fedora|Centos)/: {
       
       if $operatingsystemrelease >=6 {    
-        package { "nss-pam-ldapd": 
-          ensure => installed,
-        }
+        #package { "nss-pam-ldapd": 
+        #  ensure => installed,
+        #}
      
-        service { "nslcd":
-          ensure =>  running,
-          hasstatus => true,
-          hasrestart => true,
-          enable => true,
-          require => Package["nss-pam-ldapd"],
-        }
+        #service { "nslcd":
+        #  ensure =>  running,
+        #  hasstatus => true,
+        #  hasrestart => true,
+        #  enable => true,
+        #  require => Package["nss-pam-ldapd"],
+        #}
 
       	file { "/etc/pam.d/password-auth-ac":
         	source => "puppet:///modules/pam/password-auth-lbre",
@@ -50,7 +50,7 @@ class pam::config {
   			file { "/etc/pam.d/system-auth":
         				ensure => link,
         				target => "/etc/pam.d/system-auth-lbre",
-                notify => Service["nscld"]
+                #notify => Service["nscld"]
         }
         
       } else {
