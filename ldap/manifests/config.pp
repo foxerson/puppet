@@ -13,7 +13,6 @@ class ldap::config {
 		source => "puppet:///modules/ldap/etc_ldap.conf",
   }
   
-  # for either one.
   file { "${ldap::params::dir}/ldap.conf":
 		source => "puppet:///modules/ldap/etc_ldap_ldap.conf",
   }
@@ -22,22 +21,11 @@ class ldap::config {
        source => "puppet:///modules/ldap/nsswitch.conf",
   }
 
-  case $operatingsystem {
-    RedHat, Fedora: {
-      if $operatingsystemrelease >= 6 {
-        include ldap::service
-        
-        file { "/etc/nslcd.conf":
-          source => "puppet:///modules/ldap/nslcd.conf",
-          notify => Class["ldap::service"],
-        }
-      }
-      
-      file { "/etc/pam_ldap.conf": 
-        source => "puppet:///modules/ldap/pam_ldap.conf",
-      }
-    }  
+  file { "/etc/nslcd.conf":
+     source => "puppet:///modules/ldap/nslcd.conf",
   }
-    
-  
+      
+  file { "/etc/pam_ldap.conf": 
+     source => "puppet:///modules/ldap/pam_ldap.conf",
+  }
 }
