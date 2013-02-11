@@ -1,7 +1,7 @@
 class ldap::params {
   case $operatingsystem {
     Ubuntu,Debian: {
-      $pkgs = ["ldap-utils","nscd", "tcsh"]
+      $pkgs = ["ldap-utils","nscd", "nslcd, "tcsh"]
       $dir = "/etc/ldap"
     }
     RedHat,Fedora: {
