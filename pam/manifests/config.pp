@@ -5,6 +5,7 @@ class pam::config {
   	group => "root",
   	mode => 0644,
   	require => Class["pam::install"],
+    notify => Class["ldap::service"],
 	}
 
   # pam_access module will drop the access.conf regardless the OS.
@@ -22,17 +23,6 @@ class pam::config {
     /(RedHat|Fedora|Centos)/: {
       
       if $operatingsystemrelease >=6 {    
-        #package { "nss-pam-ldapd": 
-        #  ensure => installed,
-        #}
-     
-        #service { "nslcd":
-        #  ensure =>  running,
-        #  hasstatus => true,
-        #  hasrestart => true,
-        #  enable => true,
-        #  require => Package["nss-pam-ldapd"],
-        #}
 
       	file { "/etc/pam.d/password-auth-ac":
         	source => "puppet:///modules/pam/password-auth-lbre",
