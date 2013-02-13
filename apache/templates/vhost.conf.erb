@@ -8,7 +8,7 @@
 <% end -%>
 	DocumentRoot <%= docroot %>
 	<Directory <%= docroot %>>
-		Options Indexes FollowingSymLinks MultViews
+		Options Indexes FollowSymLinks MultiViews
 		AllowOverride None
 		Order allow,deny
 		allow from all
@@ -20,5 +20,5 @@
 <% end -%>
 
 	ErrorLog <%= logdir %>/<%= name %>-error.log
-	CustomLog <%= logdir %>/<%= name %>-access.log
+	CustomLog <%= logdir %>/<%= name %>-access.log common
 </VirtualHost>
