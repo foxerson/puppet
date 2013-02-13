@@ -12,7 +12,6 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     owner => root,
     group => root,
     mode => 777,
-    require => Class["apache"],
     notify => Service["${apache::svc}"],
   }  
 }
@@ -27,7 +26,6 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     owner => root,
     group => root,
     mode => 777,
-    require => Class["apache"],
     notify => Service["${apache::svc}"],
   }
 }
