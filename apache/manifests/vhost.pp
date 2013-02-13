@@ -13,7 +13,8 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     group => root,
     mode => 777,
     require => Class["apache"],
-  }
+    notify => Service["${svc}"],
+  }  
 }
 
 # virtual host definition for vanity URL
@@ -27,6 +28,7 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     group => root,
     mode => 777,
     require => Class["apache"],
+    notify => Service["${svc}"],
   }
 }
 
