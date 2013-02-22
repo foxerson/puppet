@@ -1,0 +1,46 @@
+#! /usr/bin/pagsh
+### BEGIN INIT INFO
+# Provides:             pag
+# Required-Start:       openafs-client
+# Required-Stop:        openafs-client
+# Should-Start:         $syslog $named openafs-fileserver
+# Should-Stop:          openafs-fileserver
+# X-Start-Before:		openafs-client
+# X-Stop-After:         autofs
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Short-Description:    k5start
+# Description:          Starts or stops k5start for service keytab, 
+#						getting the service tokens as necessary. 
+#						Outside PAG only
+### END INIT INFO
+#
+# Modified by Frederiko Costa<fcosta@stanford.edu> for Debian
+# Copyright 2000, International Business Machines Corporation and others.
+# All Rights Reserved.
+# 
+# This wrapper script will create a new pag and start both k5start and apache. Nothing else !!!
+
+
+case "$1"
+	start)
+		echo "Creating PAG"
+		/etc/init.d/k5start start
+		/etc/init.d/apache2 start
+		;;
+	stop)
+		/etc/init.d/k5start stop
+		/etc/init.d/apache2 stop
+		;;
+	restart)
+		/etc/init.d/k5start restart
+		/etc/init.d/apache2 restart
+		;;
+	*)
+		echo "Usage: $0 {start|stop|restart}"
+		exit 2
+		;;
+esac
+
+exit 0
+	

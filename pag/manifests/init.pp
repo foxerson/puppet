@@ -8,15 +8,15 @@ class pag {
     ensure      => running,
     hasstatus   => true,
     hasrestart  => true,
-    enable      => true,
+    enable      => false,
     require     => [Package["kstart"], File["/etc/init.d/k5start"]],
     subscribe   => File["/etc/init.d/k5start"],
   }
 
   file { "/etc/init.d/k5start":
     source => $operatingsystem ? {
-      "ubuntu"  => puppet:///modules/pag/k5start.sh,
-      "redhat"  => puppet:///modules/pag/k5start_rh.sh,
+      "ubuntu"  => 'puppet:///modules/pag/k5start.sh',
+      "redhat"  => 'puppet:///modules/pag/k5start_rh.sh',
     },  
     ensure => "present",
     mode => 755,
@@ -30,7 +30,7 @@ class pag {
       'ubuntu' => '/etc/default/k5start',
       'redhat' => '/etc/sysconfig/k5start',
     },
-    source => puppet:///modules/pag/k5start,
+    source => 'puppet:///modules/pag/k5start',
     ensure => "present",
     mode => 644,
     owner => root,
@@ -46,18 +46,39 @@ class pag {
     owner => root,
     group => root,
   }
-  
-  exec { "update-rc":
-    command     => "/usr/sbin/update-rc.d defaults 26 21",
-    subscribe   => File['/etc/init.d/k5start'],
-    onlyif      => "grep -i ubuntu /etc/lsb-release",
-    refreshonly => true,
+
+  # prepare the service principal service/lbrewww 
+  file { "/etc/init.d/pag":
+    source => "puppet:///modules/pag/pag",
+    ensure => present,
+    mode => 755,
+    owner => root,
+    group => root,  
   }
 
-  exec { "chkconfig":
-    command     => "/sbin/chkconfig --add k5start",
-    subscribe   => File['/etc/init.d/k5start'],
-    onlyif      => "test -f /etc/redhat-release",
-    refreshonly => true,
-  } 
+  service { "pag":
+    ensure      => running,
+    hasstatus   => true,
+    hasrestart  => true,
+    enable      => true,
+    require     => [Package["kstart"], File["/etc/init.d/pag"]],
+    subscribe   => File["/etc/init.d/pag"],
+  }
+
+  # install PAG service init
+  # exec { "update-rc":
+  #    path        => "/bin:/sbin:/usr/bin:/usr/sbin",
+  #    command     => "/usr/sbin/update-rc.d pag defaults 26 21",
+  #    subscribe   => File['/etc/init.d/pag'],
+  #    onlyif      => "grep -i ubuntu /etc/lsb-release",
+  #    refreshonly => true,
+  # }
+  # 
+  # exec { "chkconfig":
+  #    path        => "/bin:/sbin:/usr/bin:/usr/sbin",
+  #    command     => "/sbin/chkconfig --add pag",
+  #    subscribe   => File['/etc/init.d/pag'],
+  #    onlyif      => "test -f /etc/redhat-release",
+  #    refreshonly => true,
+  # } 
 }
