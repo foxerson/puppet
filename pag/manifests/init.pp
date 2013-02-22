@@ -4,14 +4,14 @@ class pag {
   
   package { 'kstart': ensure => present, }
   
-  service { "k5start":
-    ensure      => running,
-    hasstatus   => true,
-    hasrestart  => true,
-    enable      => false,
-    require     => [Package["kstart"], File["/etc/init.d/k5start"]],
-    subscribe   => File["/etc/init.d/k5start"],
-  }
+  # service { "k5start":
+  #     ensure      => running,
+  #     hasstatus   => true,
+  #     hasrestart  => true,
+  #     enable      => false,
+  #     require     => [Package["kstart"], File["/etc/init.d/k5start"]],
+  #     subscribe   => File["/etc/init.d/k5start"],
+  #   }
 
   file { "/etc/init.d/k5start":
     source => $operatingsystem ? {
@@ -56,29 +56,36 @@ class pag {
     group => root,  
   }
 
+  # The pag script will be used as service, but it will be managed by the OS
+  # The reason for this is that pag is just a wrapper script that does not need
+  # to be checked for its state
   service { "pag":
-    ensure      => running,
-    hasstatus   => true,
-    hasrestart  => true,
-    enable      => true,
-    require     => [Package["kstart"], File["/etc/init.d/pag"]],
-    subscribe   => File["/etc/init.d/pag"],
+      ensure      => stopped,
+      hasstatus   => true,
+      hasrestart  => true,
+      enable      => true,
+      require     => [Package["kstart"], File["/etc/init.d/pag"]],
+      subscribe   => File["/etc/init.d/pag"],
   }
 
-  # install PAG service init
-  # exec { "update-rc":
-  #    path        => "/bin:/sbin:/usr/bin:/usr/sbin",
-  #    command     => "/usr/sbin/update-rc.d pag defaults 26 21",
-  #    subscribe   => File['/etc/init.d/pag'],
-  #    onlyif      => "grep -i ubuntu /etc/lsb-release",
-  #    refreshonly => true,
-  # }
-  # 
-  # exec { "chkconfig":
-  #    path        => "/bin:/sbin:/usr/bin:/usr/sbin",
-  #    command     => "/sbin/chkconfig --add pag",
-  #    subscribe   => File['/etc/init.d/pag'],
-  #    onlyif      => "test -f /etc/redhat-release",
-  #    refreshonly => true,
-  # } 
+  # install PAG service init. Has dependency on openafs client (25 20). 
+  # MUST run after openafs-client shutdown earlier. Ubuntu, for some reason, 
+  # is not respecting the LSB header. Therefore, force it manually.
+   exec { "update-rc":
+      path        => "/bin:/sbin:/usr/bin:/usr/sbin",
+      command     => "/usr/sbin/update-rc.d pag defaults 26 21",
+      subscribe   => File['/etc/init.d/pag'],
+      onlyif      => "grep -i ubuntu /etc/lsb-release",
+      refreshonly => true,
+  }
+  
+  # # Same for RH. However, it respect the LSB header and dependencies 
+  #   # are managed automatically
+  #   exec { "chkconfig":
+  #       path        => "/bin:/sbin:/usr/bin:/usr/sbin",
+  #       command     => "/sbin/chkconfig --add pag",
+  #       subscribe   => File['/etc/init.d/pag'],
+  #       onlyif      => "test -f /etc/redhat-release",
+  #       refreshonly => true,
+  #   } 
 }
