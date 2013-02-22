@@ -59,9 +59,14 @@ class pag {
   # The pag script will be used as service, but it will be managed by the OS
   # The reason for this is that pag is just a wrapper script that does not need
   # to be checked for its state
+
+  # As a wrapper script, put will always to restart when it run, potentially restarting
+  # k5start and apache without need. To fix, I made the status check to always return 0, 
+  # and it should only run on the first time or when there's a file change.
   service { "pag":
-      ensure      => stopped,
-      hasstatus   => true,
+      ensure      => running,
+      hasstatus   => false,
+      status      => "/bin/echo" 
       hasrestart  => true,
       enable      => true,
       require     => [Package["kstart"], File["/etc/init.d/pag"]],
