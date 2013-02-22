@@ -21,10 +21,10 @@
 # 
 # This wrapper script will create a new pag and start both k5start and apache. Nothing else !!!
 
-function get_svc_name {
+get_svc_name() {
         if [ -r /etc/redhat-release ]; then
                 echo "httpd"
-        elif [ -f /etc/lsb-release ] && [[ $(cat /etc/lsb-release | grep -qi ubuntu) -eq 0 ]]; then
+        elif [ -f /etc/lsb-release ] &&  grep -qi ubuntu /etc/lsb-release; then
                 echo "apache2"
         else
 				# defaults to Ubuntu
@@ -32,7 +32,7 @@ function get_svc_name {
         fi
 }
 
-# define the service name to run.
+# define the service name to run
 svcname=`get_svc_name`
 
 case "$1" in
