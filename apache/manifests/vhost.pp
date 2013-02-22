@@ -7,7 +7,11 @@ define apache::vhost($ip, $docroot, $ssl=true, $template='apache/vhost.conf.erb'
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
   include apache
   
-  file { "$apache::cfg_dir/${priority}-${name}": 
+  file { "$apache::cfg_dir/${priority}-${name}":
+    path => $operatingsystem ? {
+      "ubuntu" => "$apache::cfg_dir/${priority}-${name}",
+      "redhat" => "$apache::cfg_dir/${priority}-${name}.conf",
+    },
     content => template($template),
     owner => root,
     group => root,

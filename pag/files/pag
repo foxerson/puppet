@@ -33,7 +33,7 @@ function get_svc_name {
 }
 
 # define the service name to run.
-svcname = `get_svc_name`
+svcname=`get_svc_name`
 
 case "$1" in
 	start)
