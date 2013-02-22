@@ -66,7 +66,7 @@ class pag {
   service { "pag":
       ensure      => running,
       hasstatus   => false,
-      status      => "/bin/echo" 
+      status      => "/bin/echo",
       hasrestart  => true,
       enable      => true,
       require     => [Package["kstart"], File["/etc/init.d/pag"]],

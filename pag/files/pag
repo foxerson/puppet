@@ -9,7 +9,7 @@
 # X-Stop-After:         autofs
 # Default-Start:        2 3 4 5
 # Default-Stop:         0 1 6
-# Short-Description:    k5start
+# Short-Description:    pag
 # Description:          Starts or stops k5start for service keytab, 
 #						getting the service tokens as necessary. 
 #						Outside PAG only
@@ -21,20 +21,33 @@
 # 
 # This wrapper script will create a new pag and start both k5start and apache. Nothing else !!!
 
+function get_svc_name {
+        if [ -r /etc/redhat-release ]; then
+                echo "httpd"
+        elif [ -f /etc/lsb-release ] && [[ $(cat /etc/lsb-release | grep -qi ubuntu) -eq 0 ]]; then
+                echo "apache2"
+        else
+				# defaults to Ubuntu
+              	echo "apache2"
+        fi
+}
+
+# define the service name to run.
+svcname = `get_svc_name`
 
 case "$1" in
 	start)
 		echo "Creating PAG"
 		/etc/init.d/k5start start
-		/etc/init.d/apache2 start
+		/etc/init.d/$svcname start
 		;;
 	stop)
 		/etc/init.d/k5start stop
-		/etc/init.d/apache2 stop
+		/etc/init.d/$svcname stop
 		;;
 	restart)
 		/etc/init.d/k5start restart
-		/etc/init.d/apache2 restart
+		/etc/init.d/$svcname restart
 		;;
 	*)
 		echo "Usage: $0 {start|stop|restart}"
