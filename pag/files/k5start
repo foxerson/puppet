@@ -1,0 +1,3 @@
+# default configuration file for k5start
+KEYTAB=/etc/lbrewww.keytab
+K5START_OPTS="-t -U -K 24h -b -p /var/run/k5start.pid"
