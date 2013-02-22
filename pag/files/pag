@@ -22,7 +22,7 @@
 # This wrapper script will create a new pag and start both k5start and apache. Nothing else !!!
 
 
-case "$1"
+case "$1" in
 	start)
 		echo "Creating PAG"
 		/etc/init.d/k5start start
