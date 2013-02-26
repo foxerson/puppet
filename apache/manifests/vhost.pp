@@ -5,7 +5,7 @@
 # Virtual Host definition for basic website, either using SSL or not.
 define apache::vhost($ip, $docroot, $ssl=true, $template='apache/vhost.conf.erb',
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
-  include apache
+  include apache, pag
   
   file { "$apache::cfg_dir/${priority}-${name}":
     path => $operatingsystem ? {
@@ -16,21 +16,21 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     owner => root,
     group => root,
     mode => 777,
-    notify => Service["${apache::svc}"],
+    notify => Service["pag"],
   }  
 }
 
 # virtual host definition for vanity URL
 define apache::vhost_redir($ip, $ssl=false, $dest_url, $template='apache/vhost_redirect.conf.erb',
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
-  include apache
+  include apache, pag
   
   file { "$apache::cfg_dir/${priority}-${name}": 
     content => template($template),
     owner => root,
     group => root,
     mode => 777,
-    notify => Service["${apache::svc}"],
+    notify => Service["pag"],
   }
 }
 
@@ -45,14 +45,14 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
 #                 ]
 # }
 
-define apache::vhost_proxy($ip, $serveraliases, $template='apache/vhost_custom_block.conf.erb', $custom_block='') {
-  include apache
-  
-  file { "$apache::cfg_dir/${priority}-${name}": 
-    content => template($template),
-    owner => root,
-    group => root,
-    mode => 777,
-    require => Class["apache"],
-  }
+# define apache::vhost_proxy($ip, $serveraliases, $template='apache/vhost_custom_block.conf.erb', $custom_block='') {
+#   include apache, pag
+#   
+#   file { "$apache::cfg_dir/${priority}-${name}": 
+#     content => template($template),
+#     owner => root,
+#     group => root,
+#     mode => 777,
+#     require => Class["apache"],
+#   }
 }

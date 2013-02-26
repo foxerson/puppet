@@ -12,38 +12,28 @@ class apache {
 		}
   }
   
+  # will disable apache service. Managed by pag service.
   package { $pkg: 
     ensure => present,
     notify =>    $operatingsystem ? {
-        "ubuntu"  => Exec["update-rc-apache"],
-        "redhat"  => Exec["chkconfig-apache"],
+        "ubuntu"  => Exec['update-rc-apache'],
+        "redhat"  => Exec['chkconfig-apache'],
     },
-    require => Class["pag"],
   }
-
-  # as Apache with afs support runs inside a pag, it must be disabled and 
+  
+  # Apache with afs support runs inside a pag, it must be disabled and stopped and 
   # only runs via pag init script.
-   exec { "update-rc-apache":
-      path        => "/bin:/sbin:/usr/bin:/usr/sbin",
-      command     => "/usr/sbin/update-rc.d apache2 disable",
-      onlyif      => "grep -i ubuntu /etc/lsb-release",
-      refreshonly => true,
+  exec { "update-rc-apache":
+    path        => "/bin:/sbin:/usr/bin:/usr/sbin",
+    command     => "/usr/sbin/update-rc.d apache2 disable && apache2ctl stop",
+    onlyif      => "grep -i ubuntu /etc/lsb-release",
+    refreshonly => true,
   }
-  
+   
   exec { "chkconfig-apache":
-         path        => "/bin:/sbin:/usr/bin:/usr/sbin",
-         command     => "/sbin/chkconfig httpd off",
-         onlyif      => "test -f /etc/redhat-release",
-         refreshonly => true,
-  }
-
-  # Apache runs on inside pag. Thus it will be started by pag wrapper init script
-  # service { 'apache':
-  #      ensure => running,
-  #      hasstatus => true,
-  #      hasrestart => true,
-  #      enable => false,
-  #      require => [Package["${pkg}"],Class["pag"]],
-  #   }
-  
+    path        => "/bin:/sbin:/usr/bin:/usr/sbin",
+    command     => "/sbin/chkconfig httpd off && apachectl stop",
+    onlyif      => "test -f /etc/redhat-release",
+    refreshonly => true,
+  }  
 }
