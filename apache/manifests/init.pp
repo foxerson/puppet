@@ -15,7 +15,8 @@ class apache {
   package { $pkg: ensure => present, }
 
    # Apache runs on inside pag. Thus it will be started by pag wrapper init script
-   service { $svc:
+   service { 'apache':
+      name => $svc
       ensure => running,
       hasstatus => true,
       hasrestart => true,

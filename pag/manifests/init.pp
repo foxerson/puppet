@@ -5,24 +5,24 @@ class pag {
   package { 'kstart': ensure => present, }
   
   # service { "k5start":
-  #     ensure      => running,
-  #     hasstatus   => true,
-  #     hasrestart  => true,
-  #     enable      => false,
-  #     require     => [Package["kstart"], File["/etc/init.d/k5start"]],
-  #     subscribe   => File["/etc/init.d/k5start"],
-  #   }
+  #      ensure      => running,
+  #      hasstatus   => true,
+  #      hasrestart  => false,
+  #      enable      => false,
+  #      require     => [Package["kstart"], File["/etc/init.d/k5start"]],
+  # }
 
   file { "/etc/init.d/k5start":
     source => $operatingsystem ? {
       "ubuntu"  => 'puppet:///modules/pag/k5start.sh',
       "redhat"  => 'puppet:///modules/pag/k5start_rh.sh',
-    },  
+    },
     ensure => "present",
     mode => 755,
     owner => root,
     group => root,
     require => Package["kstart"],
+    notify => Service["pag"],
   }
 
   file { 'k5start_defaults':
@@ -65,8 +65,7 @@ class pag {
   # and it should only run on the first time or when there's a file change.
   service { "pag":
       ensure      => running,
-      hasstatus   => false,
-      status      => "/bin/echo",
+      hasstatus   => true,
       hasrestart  => true,
       enable      => true,
       require     => [Package["kstart"], File["/etc/init.d/pag"]],

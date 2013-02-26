@@ -37,13 +37,16 @@ svcname=`get_svc_name`
 
 case "$1" in
 	start)
-		echo "Creating PAG"
 		/etc/init.d/k5start start
 		/etc/init.d/$svcname start
 		;;
 	stop)
 		/etc/init.d/k5start stop
 		/etc/init.d/$svcname stop
+		;;
+	status)
+		/etc/init.d/k5start status
+		/etc/init.d/$svcname status
 		;;
 	restart)
 		/etc/init.d/k5start restart
