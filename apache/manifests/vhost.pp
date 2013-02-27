@@ -21,8 +21,9 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     owner => root,
     group => root,
     mode => 777,
-    notify => Service["pag"],
-  }  
+    require => Package["$pag::apache_pkg"],
+    notify => Exec["pag_force_restart"],
+  }
 }
 
 # virtual host definition for vanity URL
@@ -40,7 +41,8 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     owner => root,
     group => root,
     mode => 777,
-    notify => Service["pag"],
+    require => Package["$pag::apache_pkg"],
+    notify => Exec["pag_forced_restart"],
   }
 }
 

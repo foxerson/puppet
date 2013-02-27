@@ -52,6 +52,7 @@ class pag {
 
   package { "$apache_pkg": 
     ensure => present,
+    notify => Service["$apache_svc"],
   }
   
   # Apache service must be disabled. Pag will start it when called.
@@ -95,5 +96,9 @@ class pag {
       subscribe   => File['/etc/init.d/pag'],
       onlyif      => "grep -i ubuntu /etc/lsb-release",
       refreshonly => true,
+   }
+   
+   exec { "pag_force_restart":
+     command => "/etc/init.d/pag restart",
    }
 }
