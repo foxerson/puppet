@@ -65,4 +65,4 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
 #     mode => 777,
 #     require => Class["apache"],
 #   }
-}
+#}
