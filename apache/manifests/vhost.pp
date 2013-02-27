@@ -5,12 +5,17 @@
 # Virtual Host definition for basic website, either using SSL or not.
 define apache::vhost($ip, $docroot, $ssl=true, $template='apache/vhost.conf.erb',
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
-  include apache, pag
+  include pag
   
-  file { "$apache::cfg_dir/${priority}-${name}":
+  $apache_conf_dir = $operatingsystem ? {
+    ubuntu => "/etc/apache2/conf.d",
+    redhat => "/etc/httpd/conf.d",
+  }
+  
+  file { "$apache_conf_dir/${priority}-${name}":
     path => $operatingsystem ? {
-      "ubuntu" => "$apache::cfg_dir/${priority}-${name}",
-      "redhat" => "$apache::cfg_dir/${priority}-${name}.conf",
+      "ubuntu" => "$apache_conf_dir/${priority}-${name}",
+      "redhat" => "$apache_conf_dir/${priority}-${name}.conf",
     },
     content => template($template),
     owner => root,
@@ -23,9 +28,14 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
 # virtual host definition for vanity URL
 define apache::vhost_redir($ip, $ssl=false, $dest_url, $template='apache/vhost_redirect.conf.erb',
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
-  include apache, pag
+  include pag
   
-  file { "$apache::cfg_dir/${priority}-${name}": 
+  $apache_conf_dir = $operatingsystem ? {
+    ubuntu => "/etc/apache2/conf.d",
+    redhat => "/etc/httpd/conf.d",
+  }
+  
+  file { "$apache_conf_dir/${priority}-${name}": 
     content => template($template),
     owner => root,
     group => root,
