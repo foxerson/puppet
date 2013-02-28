@@ -41,12 +41,12 @@ case "$1" in
 		/etc/init.d/$svcname start
 		;;
 	stop)
-		/etc/init.d/k5start stop
 		/etc/init.d/$svcname stop
+		/etc/init.d/k5start stop
 		;;
 	status)
-		/etc/init.d/k5start status
 		/etc/init.d/$svcname status
+		/etc/init.d/k5start status
 		;;
 	restart)
 		/etc/init.d/k5start restart
