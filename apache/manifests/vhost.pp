@@ -5,7 +5,7 @@
 # Virtual Host definition for basic website, either using SSL or not.
 define apache::vhost($ip, $docroot, $ssl=true, $template='apache/vhost.conf.erb',
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
-  include pag
+  include apache
   
   $apache_conf_dir = $operatingsystem ? {
     ubuntu => "/etc/apache2/conf.d",
@@ -21,7 +21,6 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     owner => root,
     group => root,
     mode => 777,
-    require => Package["$pag::apache_pkg"],
     notify => Exec["pag_force_restart"],
   }
 }
@@ -29,7 +28,7 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
 # virtual host definition for vanity URL
 define apache::vhost_redir($ip, $ssl=false, $dest_url, $template='apache/vhost_redirect.conf.erb',
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
-  include pag
+  include apache
   
   $apache_conf_dir = $operatingsystem ? {
     ubuntu => "/etc/apache2/conf.d",
@@ -41,8 +40,7 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     owner => root,
     group => root,
     mode => 777,
-    require => Package["$pag::apache_pkg"],
-    notify => Exec["pag_forced_restart"],
+    notify => Exec["pag_force_restart"],
   }
 }
 
