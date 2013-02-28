@@ -9,12 +9,12 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
   
   case $operatingsystem {
   		'Ubuntu','Debian': { 
-  		  $apache_conf_dir = "/etc/apache2/conf.d",
-  		  $apache_log_dir = "/var/log/apache",
+  		  $apache_conf_dir = "/etc/apache2/conf.d"
+  		  $apache_log_dir = "/var/log/apache"
   		}
   		'RedHat', 'CentOS': { 
-  		  $apache_conf_dir = "/etc/httpd/conf.d",
-  		  $apache_log_dir = "/var/log/httpd",
+  		  $apache_conf_dir = "/etc/httpd/conf.d"
+  		  $apache_log_dir = "/var/log/httpd"
   		}
   }
   
