@@ -2,7 +2,7 @@ class apache {
   # deploys k5start init scripts and Apache running inside PAG.
   
   # define relationship and ordering (> 2.6.0)
-  Package['apache', 'kstart'] -> File['k5start','svc_keytab','pag_init', 'k5start_defaults'] ~> Service['pag']
+  # Package['apache', 'kstart'] -> File['k5start','svc_keytab','pag_init', 'k5start_defaults'] ~> Service['pag']
   
   # Installation
   # k5start
@@ -40,7 +40,7 @@ class apache {
     hasstatus => true,
     hasrestart => true,
     enable => true,
-    #require => Package['apache', 'kstart'],
+    require => [Package['apache', 'kstart'], File["/etc/init.d/pag"]],
   }
  
   file { "/etc/init.d/k5start":
@@ -53,7 +53,7 @@ class apache {
     mode => 755,
     owner => root,
     group => root,
-    #require => Package["kstart"],
+    require => Package["kstart"],
   }
  
   file { 'k5start_defaults':
@@ -66,7 +66,7 @@ class apache {
     mode => 644,
     owner => root,
     group => root,
-    #require => Package["kstart"],
+    require => Package["kstart"],
   }
  
   # service principal service/lbrewww 
