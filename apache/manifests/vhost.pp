@@ -21,6 +21,7 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     owner => root,
     group => root,
     mode => 777,
+    require => Package[apache],
     notify => Exec["pag_force_restart"],
   }
 }
@@ -40,6 +41,7 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     owner => root,
     group => root,
     mode => 777,
+    require => Package[apache],
     notify => Exec["pag_force_restart"],
   }
 }
