@@ -10,7 +10,7 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
   case $operatingsystem {
   		'Ubuntu','Debian': { 
   		  $apache_conf_dir = "/etc/apache2/conf.d"
-  		  $apache_log_dir = "/var/log/apache"
+  		  $apache_log_dir = "/var/log/apache2"
   		}
   		'RedHat', 'CentOS': { 
   		  $apache_conf_dir = "/etc/httpd/conf.d"
@@ -37,9 +37,15 @@ define apache::vhost_redir($ip, $ssl=false, $dest_url, $template='apache/vhost_r
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
   include apache
   
-  $apache_conf_dir = $operatingsystem ? {
-    ubuntu => "/etc/apache2/conf.d",
-    redhat => "/etc/httpd/conf.d",
+  case $operatingsystem {
+  		'Ubuntu','Debian': { 
+  		  $apache_conf_dir = "/etc/apache2/conf.d"
+  		  $apache_log_dir = "/var/log/apache2"
+  		}
+  		'RedHat', 'CentOS': { 
+  		  $apache_conf_dir = "/etc/httpd/conf.d"
+  		  $apache_log_dir = "/var/log/httpd"
+  		}
   }
   
   file { "$apache_conf_dir/${priority}-${name}": 
