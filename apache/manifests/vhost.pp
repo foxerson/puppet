@@ -30,33 +30,41 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     require => Package[apache],
     notify => Exec["pag_force_restart"],
   }
+  
+  # needed to reload Apache
+   exec { "pag_force_restart":
+      command => "/etc/init.d/pag restart",
+      subscribe => File["$apache_conf_dir/${priority}-${name}"],
+      refreshonly => true,
+      require => Service[pag],
+   }
 }
 
 # virtual host definition for vanity URL
-define apache::vhost_redir($ip, $ssl=false, $dest_url, $template='apache/vhost_redirect.conf.erb',
-$priority, $serveraliases= '', $logdir='/var/log/apache') {
-  include apache
-  
-  case $operatingsystem {
-  		'Ubuntu','Debian': { 
-  		  $apache_conf_dir = "/etc/apache2/conf.d"
-  		  $apache_log_dir = "/var/log/apache2"
-  		}
-  		'RedHat', 'CentOS': { 
-  		  $apache_conf_dir = "/etc/httpd/conf.d"
-  		  $apache_log_dir = "/var/log/httpd"
-  		}
-  }
-  
-  file { "$apache_conf_dir/${priority}-${name}": 
-    content => template($template),
-    owner => root,
-    group => root,
-    mode => 777,
-    require => Package[apache],
-    notify => Exec["pag_force_restart"],
-  }
-}
+# define apache::vhost_redir($ip, $ssl=false, $dest_url, $template='apache/vhost_redirect.conf.erb',
+# $priority, $serveraliases= '', $logdir='/var/log/apache') {
+#   include apache
+#   
+#   case $operatingsystem {
+#       'Ubuntu','Debian': { 
+#         $apache_conf_dir = "/etc/apache2/conf.d"
+#         $apache_log_dir = "/var/log/apache2"
+#       }
+#       'RedHat', 'CentOS': { 
+#         $apache_conf_dir = "/etc/httpd/conf.d"
+#         $apache_log_dir = "/var/log/httpd"
+#       }
+#   }
+#   
+#   file { "$apache_conf_dir/${priority}-${name}": 
+#     content => template($template),
+#     owner => root,
+#     group => root,
+#     mode => 777,
+#     require => Package[apache],
+#     notify => Exec["pag_force_restart"],
+#   }
+# }
 
 # generating a configuration with multiple locations and webauth
 # Sample call:

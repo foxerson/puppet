@@ -28,7 +28,7 @@ class apache {
  
   # Apache service must be managed by pag service
   service { "$apache_svc":
-    ensure  => stopped,
+    ensure  => running,
     hasstatus => true,
     hasrestart => true,
     enable => false,
@@ -99,10 +99,4 @@ class apache {
       onlyif      => "grep -i ubuntu /etc/lsb-release",
       refreshonly => true,
    }   
-   
-   # needed to reload Apache
-   exec { "pag_force_restart":
-      command => "/etc/init.d/pag restart",
-      require => Service[pag],
-   }
 }
