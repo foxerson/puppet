@@ -40,7 +40,7 @@ class apache {
     hasstatus => true,
     hasrestart => true,
     enable => true,
-    require => [Package['apache', 'kstart'], File["/etc/init.d/pag"]],
+    require => [Package['apache', 'kstart'], File['k5start','/etc/init.d/pag']],
   }
  
   file { "/etc/init.d/k5start":
@@ -77,6 +77,7 @@ class apache {
     mode => 600,
     owner => root,
     group => root,
+    require => Package["kstart"],
   }
 
   # prepare the service principal service/lbrewww 
@@ -102,5 +103,6 @@ class apache {
    # needed to reload Apache
    exec { "pag_force_restart":
       command => "/etc/init.d/pag restart",
+      require => Service[pag],
    }
 }
