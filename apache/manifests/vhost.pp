@@ -7,9 +7,15 @@ define apache::vhost($ip, $docroot, $ssl=true, $template='apache/vhost.conf.erb'
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
   include apache
   
-  $apache_conf_dir = $operatingsystem ? {
-    ubuntu => "/etc/apache2/conf.d",
-    redhat => "/etc/httpd/conf.d",
+  case $operatingsystem {
+  		'Ubuntu','Debian': { 
+  		  $apache_conf_dir = "/etc/apache2/conf.d",
+  		  $apache_log_dir = "/var/log/apache",
+  		}
+  		'RedHat', 'CentOS': { 
+  		  $apache_conf_dir = "/etc/httpd/conf.d",
+  		  $apache_log_dir = "/var/log/httpd",
+  		}
   }
   
   file { "$apache_conf_dir/${priority}-${name}":
