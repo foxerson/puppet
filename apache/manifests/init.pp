@@ -23,12 +23,13 @@ class apache {
   package { "$apache_pkg": 
     ensure => present,
     alias => apache,
-    notify => Service["$apache_svc"],
+    notify => Service[apache_disable],
   }
  
   # Apache service must be managed by pag service
   service { "$apache_svc":
-    ensure  => running,
+    alias => apache_disable,
+    ensure  => stopped,
     hasstatus => true,
     hasrestart => true,
     enable => false,
@@ -40,11 +41,33 @@ class apache {
     hasstatus => true,
     hasrestart => true,
     enable => true,
-    require => [Package['apache', 'kstart'], File['k5start','/etc/init.d/pag']],
+    require => [ Class['openafs::install'], Package['apache','kstart'], File['k5start_init','pag_init'] ],
   }
- 
+  
+  # prepare the service principal service/lbrewww 
+  file { "/etc/init.d/pag":
+     alias => pag_init,
+     source => "puppet:///modules/apache/pag",
+     ensure => present,
+     mode => 755,
+     owner => root,
+     group => root,
+     notify => Service[pag],
+  }
+  
+  # install PAG service init. Has dependency on openafs client (25 20). 
+  # MUST run after openafs-client shutdown earlier. Ubuntu, for some reason, 
+  # is not respecting the LSB header. Therefore, force it manually.
+   exec { "update-rc":
+      path        => "/bin:/sbin:/usr/bin:/usr/sbin",
+      command     => "/usr/sbin/update-rc.d pag defaults 26 21",
+      subscribe   => File['/etc/init.d/pag'],
+      onlyif      => "grep -i ubuntu /etc/lsb-release",
+      refreshonly => true,
+   }
+   
   file { "/etc/init.d/k5start":
-    alias => k5start,
+    alias => k5start_init,
     source => $operatingsystem ? {
       "ubuntu"  => 'puppet:///modules/apache/k5start.sh',
       "redhat"  => 'puppet:///modules/apache/k5start_rh.sh',
@@ -53,7 +76,8 @@ class apache {
     mode => 755,
     owner => root,
     group => root,
-    require => Package["kstart"],
+    require => [Package[kstart], File['k5start_defaults', 'svc_keytab']],
+    notify => Service[pag],
   }
  
   file { 'k5start_defaults':
@@ -67,6 +91,7 @@ class apache {
     owner => root,
     group => root,
     require => Package["kstart"],
+    notify => Service[pag],
   }
  
   # service principal service/lbrewww 
@@ -78,25 +103,7 @@ class apache {
     owner => root,
     group => root,
     require => Package["kstart"],
+    notify => Service[pag],
   }
 
-  # prepare the service principal service/lbrewww 
-  file { "/etc/init.d/pag":
-    source => "puppet:///modules/apache/pag",
-    ensure => present,
-    mode => 755,
-    owner => root,
-    group => root,  
-  }
-
-  # install PAG service init. Has dependency on openafs client (25 20). 
-  # MUST run after openafs-client shutdown earlier. Ubuntu, for some reason, 
-  # is not respecting the LSB header. Therefore, force it manually.
-   exec { "update-rc":
-      path        => "/bin:/sbin:/usr/bin:/usr/sbin",
-      command     => "/usr/sbin/update-rc.d pag defaults 26 21",
-      subscribe   => File['/etc/init.d/pag'],
-      onlyif      => "grep -i ubuntu /etc/lsb-release",
-      refreshonly => true,
-   }   
 }

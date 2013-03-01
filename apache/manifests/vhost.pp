@@ -28,16 +28,16 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
     group => root,
     mode => 777,
     require => Package[apache],
-    notify => Exec["pag_force_restart"],
+    notify => Service[pag],
   }
   
-  # needed to reload Apache
-   exec { "pag_force_restart":
-      command => "/etc/init.d/pag restart",
-      subscribe => File["$apache_conf_dir/${priority}-${name}"],
-      refreshonly => true,
-      require => Service[pag],
-   }
+  # # needed to reload Apache
+  #    exec { "pag_force_restart":
+  #       command => "/etc/init.d/pag restart",
+  #       subscribe => File["$apache_conf_dir/${priority}-${name}"],
+  #       refreshonly => true,
+  #       #require => Service[pag],
+  #    }
 }
 
 # virtual host definition for vanity URL
