@@ -29,6 +29,8 @@ class apache {
       "ubuntu" => "update-rc.d apache2 disable",
       "redhat" => "chkconfig httpd off",
     },
+    subscribe => Package[package],
+    refreshonly => true,
   }
   
   # Service pag is the one that should start/stop k5start+apache
