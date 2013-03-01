@@ -20,7 +20,7 @@ class apache {
   package { "$apache_pkg": 
     ensure => present,
     alias => apache,
-    notify => Exec[apache_disable],
+    # notify => Exec[apache_disable],
   }
   
   exec { "apache_disable":
