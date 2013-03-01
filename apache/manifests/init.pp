@@ -1,9 +1,6 @@
 class apache { 
   # deploys k5start init scripts and Apache running inside PAG.
   
-  # define relationship and ordering (> 2.6.0)
-  # Package['apache', 'kstart'] -> File['k5start','svc_keytab','pag_init', 'k5start_defaults'] ~> Service['pag']
-  
   # Installation
   # k5start
   package { 'kstart': ensure => present, }
@@ -23,16 +20,15 @@ class apache {
   package { "$apache_pkg": 
     ensure => present,
     alias => apache,
-    notify => Service[apache_disable],
+    notify => Exec[apache_disable],
   }
- 
-  # Apache service must be managed by pag service
-  service { "$apache_svc":
-    alias => apache_disable,
-    ensure  => stopped,
-    hasstatus => true,
-    hasrestart => true,
-    enable => false,
+  
+  exec { "apache_disable":
+    path  => "/bin:/sbin:/usr/bin:/usr/sbin",
+    command => $operatingsystem ? {
+      "ubuntu" => "update-rc.d apache2 disable",
+      "redhat" => "chkconfig httpd off",
+    },
   }
   
   # Service pag is the one that should start/stop k5start+apache
