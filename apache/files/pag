@@ -37,8 +37,13 @@ svcname=`get_svc_name`
 
 case "$1" in
 	start)
-		/etc/init.d/k5start start
-		/etc/init.d/$svcname start
+		if ! (/etc/init.d/$svcname status > /dev/null) && ! (/etc/init.d/k5start status >/dev/null); then
+			/etc/init.d/k5start start 
+			/etc/init.d/$svcname start		
+		elif ! /etc/init.d/$svcname status > /dev/null || ! /etc/init.d/k5start status >/dev/null; then
+			/etc/init.d/k5start restart
+			/etc/init.d/$svcname restart
+		fi
 		;;
 	stop)
 		/etc/init.d/$svcname stop
@@ -46,16 +51,19 @@ case "$1" in
 		;;
 	status)
 		/etc/init.d/$svcname status
+		retval=$?
+        [ $retval -ne 0 ] && exit $retval
 		/etc/init.d/k5start status
+		retval=$?
+        [ $retval -ne 0 ] && exit $retval
+		exit 0
 		;;
 	restart)
 		/etc/init.d/k5start restart
 		/etc/init.d/$svcname restart
 		;;
 	*)
-		echo "Usage: $0 {start|stop|restart}"
+		echo "Usage: $0 {start|stop|status|restart}"
 		exit 2
 		;;
 esac
-
-	
