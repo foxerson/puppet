@@ -29,7 +29,7 @@ class apache {
       "ubuntu" => "update-rc.d apache2 disable",
       "redhat" => "chkconfig httpd off",
     },
-    subscribe => Package[package],
+    subscribe => Package[apache],
     refreshonly => true,
   }
   
