@@ -81,11 +81,10 @@ case $1 in
 		echo
 		;;
 	restart)
-		if status $NAME > /dev/null; then
-			$0 stop
-			sleep 1
-			$0 start
-		fi
+		$0 stop
+		sleep 1
+		$0 start
+
 		;;
 	status)
 		status $NAME

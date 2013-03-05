@@ -9,6 +9,6 @@
 <% end -%>
         RedirectMatch permanent (.*) <%= dest_url %>
 
-        ErrorLog <%= logdir %>/<%= name %>-error.log
-        CustomLog <%= logdir %>/<%= name %>-access.log
+        ErrorLog <%= apache_log_dir %>/<%= name %>-error.log
+        CustomLog <%= apache_log_dir %>/<%= name %>-access.log
 </VirtualHost>

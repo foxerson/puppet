@@ -7,32 +7,64 @@ define apache::vhost($ip, $docroot, $ssl=true, $template='apache/vhost.conf.erb'
 $priority, $serveraliases= '', $logdir='/var/log/apache') {
   include apache
   
-  file { "$apache::cfg_dir/${priority}-${name}":
+  case $operatingsystem {
+  		'Ubuntu','Debian': { 
+  		  $apache_conf_dir = "/etc/apache2/conf.d"
+  		  $apache_log_dir = "/var/log/apache2"
+  		}
+  		'RedHat', 'CentOS': { 
+  		  $apache_conf_dir = "/etc/httpd/conf.d"
+  		  $apache_log_dir = "/var/log/httpd"
+  		}
+  }
+  
+  file { "$apache_conf_dir/${priority}-${name}":
     path => $operatingsystem ? {
-      "ubuntu" => "$apache::cfg_dir/${priority}-${name}",
-      "redhat" => "$apache::cfg_dir/${priority}-${name}.conf",
+      "ubuntu" => "$apache_conf_dir/${priority}-${name}",
+      "redhat" => "$apache_conf_dir/${priority}-${name}.conf",
     },
     content => template($template),
     owner => root,
     group => root,
     mode => 777,
-    notify => Service["${apache::svc}"],
-  }  
+    require => Package[apache],
+    notify => Service[pag],
+  }
+  
+  # # needed to reload Apache
+  #    exec { "pag_force_restart":
+  #       command => "/etc/init.d/pag restart",
+  #       subscribe => File["$apache_conf_dir/${priority}-${name}"],
+  #       refreshonly => true,
+  #       #require => Service[pag],
+  #    }
 }
 
 # virtual host definition for vanity URL
-define apache::vhost_redir($ip, $ssl=false, $dest_url, $template='apache/vhost_redirect.conf.erb',
-$priority, $serveraliases= '', $logdir='/var/log/apache') {
-  include apache
-  
-  file { "$apache::cfg_dir/${priority}-${name}": 
-    content => template($template),
-    owner => root,
-    group => root,
-    mode => 777,
-    notify => Service["${apache::svc}"],
-  }
-}
+# define apache::vhost_redir($ip, $ssl=false, $dest_url, $template='apache/vhost_redirect.conf.erb',
+# $priority, $serveraliases= '', $logdir='/var/log/apache') {
+#   include apache
+#   
+#   case $operatingsystem {
+#       'Ubuntu','Debian': { 
+#         $apache_conf_dir = "/etc/apache2/conf.d"
+#         $apache_log_dir = "/var/log/apache2"
+#       }
+#       'RedHat', 'CentOS': { 
+#         $apache_conf_dir = "/etc/httpd/conf.d"
+#         $apache_log_dir = "/var/log/httpd"
+#       }
+#   }
+#   
+#   file { "$apache_conf_dir/${priority}-${name}": 
+#     content => template($template),
+#     owner => root,
+#     group => root,
+#     mode => 777,
+#     require => Package[apache],
+#     notify => Exec["pag_force_restart"],
+#   }
+# }
 
 # generating a configuration with multiple locations and webauth
 # Sample call:
@@ -45,14 +77,14 @@ $priority, $serveraliases= '', $logdir='/var/log/apache') {
 #                 ]
 # }
 
-define apache::vhost_proxy($ip, $serveraliases, $template='apache/vhost_custom_block.conf.erb', $custom_block='') {
-  include apache
-  
-  file { "$apache::cfg_dir/${priority}-${name}": 
-    content => template($template),
-    owner => root,
-    group => root,
-    mode => 777,
-    require => Class["apache"],
-  }
-}
+# define apache::vhost_proxy($ip, $serveraliases, $template='apache/vhost_custom_block.conf.erb', $custom_block='') {
+#   include apache, pag
+#   
+#   file { "$apache::cfg_dir/${priority}-${name}": 
+#     content => template($template),
+#     owner => root,
+#     group => root,
+#     mode => 777,
+#     require => Class["apache"],
+#   }
+#}

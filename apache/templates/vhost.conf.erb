@@ -19,6 +19,6 @@
 <%= "	SSLCertificateChainFile /afs/ir/group/lbre-tsg/ssl-certs/#{@hostname}/#{name}.cer" -%> 	
 <% end -%>
 
-	ErrorLog <%= logdir %>/<%= name %>-error.log
-	CustomLog <%= logdir %>/<%= name %>-access.log common
+	ErrorLog <%= apache_log_dir %>/<%= name %>-error.log
+	CustomLog <%= apache_log_dir %>/<%= name %>-access.log common
 </VirtualHost>
