@@ -1,0 +1,20 @@
+# This is the file that grants/deny access to users in the servers.
+## MANAGED BY PUPPET. DO NOT MODIFY
+
+# Allows root user to connect from anywhere.
++ : root : ALL
+
+# Allowed Users/groups
+<% if allow.is_a? Array and allow.length > 0 %> + : <%= allow.join(' ') %> : ALL
+<% elsif allow.is_a? String and !allow.empty? %> + : <%= allow.to_s %> : ALL
+<% else %><%= scope.function_fail(["Allow argument is not valid"]) %>
+<% end %>
+
+# Denied Users/groups
+<% if deny.is_a? Array and deny.length > 0 %> + : <%= deny.join(' ') %> : ALL
+<% elsif deny.is_a? String and !deny.empty? %> + : <%= deny.to_s %> : ALL
+<% else %><%= scope.function_fail(["Deny argument is not valid"]) %>
+<% end %>
+
+# everyone else is denied
+- : ALL : ALL
