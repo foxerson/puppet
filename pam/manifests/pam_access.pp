@@ -1,4 +1,4 @@
-define pam::access(allow=[],deny=[]) {  
+define pam::access($allow=[],$deny=[]) {  
   include pam
   
   # pam_access module will drop the access.conf regardless the OS.
