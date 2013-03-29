@@ -8,11 +8,6 @@ class pam::config {
     notify => Class["ldap::service"],
 	}
 
-  # pam_access module will drop the access.conf regardless the OS.
-  file { "/etc/security/access.conf":
-    source => "puppet:///modules/pam/access.conf",
-  }
-
   # Dropping sudoers file
   file { "/etc/sudoers":
     source => "puppet:///modules/pam/sudoers",
