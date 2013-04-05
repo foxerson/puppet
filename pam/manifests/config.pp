@@ -10,7 +10,7 @@ class pam::config {
 
   # Dropping sudoers file
   file { "/etc/sudoers":
-    source => "puppet:///modules/pam/sudoers",
+    content => template('pam/sudoers.erb'),
     mode => 0440,
   }
   

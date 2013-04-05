@@ -1,0 +1,46 @@
+# User alias specification
+User_Alias INFRA = marcelom, eskender, %infra
+User_Alias AG = fcosta, effcomp1, bcw, mfahmed, cywcheng, %ag
+
+# Runas alias specification
+# Host alias specification
+<%# Host is development or production. Based on hostname %>
+<% if @hostname =~ /lbre-\w+-dev/ %>Host_Alias DEV = <%= @hostname %>,<%= @fqdn %>
+<% else %>Host_Alias PROD = <%= @hostname %>,<%= @fqdn %><% end %>
+
+# Command alias specification
+Cmnd_Alias LOGS = /bin/tailf, /usr/bin/tail, /usr/bin/less, /bin/cat, /bin/ls
+
+# Defaults specification
+#
+# Disable "ssh hostname sudo <cmd>", because it will show the password in clear.
+#         You have to run "ssh -t hostname sudo <cmd>".
+#
+Defaults    requiretty
+
+#
+# Refuse to run if unable to disable echo on the tty. This setting should also be
+# changed in order to be able to use sudo without a tty. See requiretty above.
+#
+Defaults   !visiblepw
+
+Defaults	syslog=auth
+Defaults    env_reset
+Defaults    env_keep = "COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR \
+                        LS_COLORS MAIL PS1 PS2 QTDIR USERNAME \
+                        LANG LC_ADDRESS LC_CTYPE LC_COLLATE LC_IDENTIFICATION \
+                        LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC \
+                        LC_PAPER LC_TELEPHONE LC_TIME LC_ALL LANGUAGE LINGUAS \
+                        _XKB_CHARSET XAUTHORITY"
+
+# Allow root to run any commands anywhere
+root ALL = (ALL) ALL
+
+# INFRA users can do anything, anywhere
+INFRA ALL = (ALL) ALL
+
+# AG can only see logs in production servers ...
+# But AG can actually become root and run anything as some other user in development servers.
+<%# Testing again to print correspondent string %>
+<% if @hostname =~ /lbre-\w+-dev/ %>AG DEV = (ALL) ALL
+<% else %>AG PROD = NOPASSWD:LOGS<% end %>
