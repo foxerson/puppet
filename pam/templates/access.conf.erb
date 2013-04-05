@@ -10,11 +10,5 @@
 <% elsif allow.empty? %><%= scope.function_fail(["Allow argument cannot be empty."]) %>
 <% end %>
 
-# Denied Users/groups
-<% if deny.is_a? Array and not deny.empty? %>-: <%= deny.select { |i| i.is_a?(String) }.join(' ') -%>: ALL
-<% elsif deny.is_a? String and not deny.empty? %>-: <%= deny %>: ALL
-<% elsif deny.empty? %><%= scope.function_fail(["Deny argument cannot be empty."]) %>
-<% end %>
-
 # everyone else is denied
 - : ALL : ALL
