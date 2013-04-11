@@ -87,8 +87,8 @@ define haproxy::balancermember (
   $options      = ''
 ) {
   # Template uses $ipaddresses, $server_name, $ports, $option
-  concat::fragment { "02balancermember_${name}":
-    order   => "20-${listening_service}_${name}",
+  concat::fragment { "${name}":
+    order   => "20-${listening_service}_02balancermember_${name}",
     target  => '/etc/haproxy/haproxy.cfg',
     content => template('haproxy/haproxy_balancermember.erb'),
   }

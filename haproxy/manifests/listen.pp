@@ -81,8 +81,8 @@ define haproxy::listen (
   }
 ) {
   # Template uses: $name, $ipaddress, $ports, $options
-  concat::fragment { "${name}_01listen_block":
-    order   => "20-${name}",
+  concat::fragment { "${name}":
+    order   => "20-${name}_01listen_block",
     target  => '/etc/haproxy/haproxy.cfg',
     content => template('haproxy/haproxy_listen_block.erb'),
   }
