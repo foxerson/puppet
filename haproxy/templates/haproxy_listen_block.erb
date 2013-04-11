@@ -1,6 +1,6 @@
 
 listen <%= name %> <%= ipaddress %>:<%= Array(ports).collect { |x| x.split(',')}.flatten.join(",#{ipaddress}:") %>
-mode <%= mode %>
+  mode <%= mode %>
 <% options.sort.each do |key, val| -%>
 <% if val.is_a?(Array) -%>
 <% val.each do |item| -%>
